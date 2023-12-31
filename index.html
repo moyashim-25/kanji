@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="もやしくん">
+    <meta name="description" content="漢字かな文字をランダムに表示します。">
+    <title>書き初めなににする？</title>
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@moyashiM_25">
+    <meta property="og:title" content="サイトについて">
+    <meta property="og:url" content="https://moyashim-25.github.io/kanji/">
+    <meta property="og:description" content="漢字かな文字をランダムに表示します。">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://moyashim-25.github.io/kanji/favicon.png">
+    <link rel="shortcut icon" href="/favicon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Noto+Serif+HK&family=Noto+Serif+JP&family=Noto+Serif+SC&family=Noto+Serif+TC&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            margin: 1rem;
+            font-family: 'Noto Sans JP', 'Noto Sans CJK JP', sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: normal;
+        }
+
+        h2 {
+            font-weight: normal;
+        }
+
+        span#kanji {
+            font-family: 'Noto Serif JP', 'Noto Serif SC', 'Noto Serif TC', 'Noto Serif HK', KaiTi, "Songti SC", "Songti TC", "SCKaiTi", "TCKaiTi", "STSong", serif;
+            font-size: 10rem;
+        }
+
+        span#unicode {
+            font-family: Menlo, Monaco, Consolas, 'Courier New', "Lucida Console", Courier, monospace;
+        }
+
+        span.dsp {
+            display: block;
+            text-align: center;
+        }
+
+        div#divbtn {
+            margin: 0.5rem;
+            display: flex;
+            justify-content: space-around;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 0 1rem;
+        }
+
+        button {
+            padding: 0 0.5rem;
+        }
+
+        label {
+            margin-left: 0.3rem;
+        }
+
+        p#uniInfo {
+            font-size: small;
+            color: gray;
+            text-align: center;
+        }
+
+        hr {
+            margin: 0.3rem;
+            border: none;
+            border-top: 1px black solid;
+        }
+
+        li {
+            margin-left: 1.5em;
+        }
+
+        footer {
+            font-size: 0.8em;
+            display: flex;
+            justify-content: space-around;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 0 1rem;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        small {
+            font-size: 100%;
+        }
+
+        @media screen and (max-width: 12rem) {
+            h1 {
+                font-size: 1rem;
+            }
+
+            span#kanji {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>書き初めなににする？</h1>
+    <span class="dsp" id="kanji">？</span>
+    <span class="dsp" id="unicode">U+FF1F</span>
+    <div id="divbtn">
+        <button onclick="run()">決める！</button>
+        <span><input type="checkbox" name="kana" id="kana"><label for="kana">かなを含む</label></span>
+    </div>
+    <p id="uniInfo">上のリンクをクリックすると、表示されている文字をGoogle検索できます</p>
+
+    <hr>
+    <h2>これはなに</h2>
+    <ul>
+        <li>CJK統合漢字（U+4E00～U+9FFF）をランダムに表示</li>
+        <li>チェックボックスをアクティブにすることで、平仮名（U+3041～U+3096）と片仮名（U+30A0～U+30FF）を追加してランダム表示</li>
+        <li><img src="favicon.png" alt="ビャンビャン麺のビャンの漢字" height="50" style="display: inline-block;">（U+30EDE）は表示されません
+        </li>
+        <li>フォントには Google Font の Noto Serif シリーズを使用しています</li>
+    </ul>
+    <p></p>
+    <hr>
+    <footer>
+        <p><a href="https://github.com/moyashim-25/kanji/" target="_blank">GitHub</a></p>
+        <p><a href="https://x.com/moyashiM_25" target="_blank">X</a></p>
+        <small>&copy; 2023 もやしくん</small>
+    </footer>
+
+    <script>
+        const dispKanji = document.getElementById("kanji");
+        const dispUnicode = document.getElementById("unicode");
+        function kanjinoji() {
+            return 0x4e00 + (Math.floor((Math.random() * 20992 % 20992)));
+        }
+        function kananoji() {
+            return 0x3041 + (Math.floor((Math.random() * 87 % 87)));
+        }
+        function katakananoji() {
+            return 0x30a0 + (Math.floor((Math.random() * 96 % 96)));
+        }
+
+        function chooseKanji(jpkana) {
+            if (jpkana) {
+                var ktkn = Math.floor(Math.random() * 3 % 3);
+                if (ktkn == 0) {
+                    return kananoji();
+                } else if (ktkn == 1) {
+                    return katakananoji()
+                }
+            }
+            return kanjinoji();
+        }
+
+        function run() {
+            var kanach = 0;
+            if (document.getElementById("kana").checked) {
+                kanach = 1;
+            }
+            var uniKanji = chooseKanji(kanach);
+            dispKanji.innerText = String.fromCodePoint(uniKanji);
+            dispUnicode.innerHTML = '<a href="https://www.google.com/search?q=' + String.fromCodePoint(uniKanji) + '" target="_blank">' + "U+" + uniKanji.toString(16) + '</a>';
+        }
+    </script>
+</body>
+
+</html>
