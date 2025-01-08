@@ -14,7 +14,7 @@
     <meta property="og:description" content="漢字かな文字をランダムに表示します。">
     <meta property="og:type" content="article">
     <meta property="og:image" content="https://moyashim-25.github.io/kanji/favicon.png">
-    <link rel="shortcut icon" href="/favicon.png" type="image/png">
+    <link rel="shortcut icon" href="https://moyashim-25.github.io/kanji/favicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -58,9 +58,16 @@
         div#divbtn {
             margin: 0.5rem;
             display: flex;
-            justify-content: space-around;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            gap: 0 1rem;
+            align-items: center;
+        }
+
+        div#divbtn>div {
+            margin: 0.5rem;
+            display: flex;
             flex-direction: row;
-            flex-wrap: wrap;
             gap: 0 1rem;
         }
 
@@ -72,7 +79,7 @@
             margin-left: 0.3rem;
         }
 
-        p#uniInfo {
+        p.uniInfo {
             font-size: small;
             color: gray;
             text-align: center;
@@ -120,10 +127,14 @@
     <span class="dsp" id="kanji">？</span>
     <span class="dsp" id="unicode">U+FF1F</span>
     <div id="divbtn">
-        <button onclick="run()">決める！</button>
-        <span><input type="checkbox" name="kana" id="kana"><label for="kana">かなを含む</label></span>
+        <div>
+            <button onclick="run()">決める！</button>
+            <span><input type="checkbox" name="kana" id="kana"><label for="kana">かなを含む</label></span>
+        </div>
+        <span id="x_post">Xにポストする</span>
     </div>
-    <p id="uniInfo">上のリンクをクリックすると、表示されている文字をGoogle検索できます</p>
+    <p class="uniInfo">Unicodeのリンクをクリックすると、表示されている文字をGoogle検索できます。</p>
+    <p class="uniInfo">「Xにポストする」のリンクをクリックすると、Xで共有できます。</p>
 
     <hr>
     <h2>これはなに</h2>
@@ -139,12 +150,15 @@
     <footer>
         <p><a href="https://github.com/moyashim-25/kanji/" target="_blank">GitHub</a></p>
         <p><a href="https://x.com/moyashiM_25" target="_blank">X</a></p>
-        <small>&copy; 2023 もやしくん</small>
+        <p><a href="https://moyashim-25.com" target="_blank">ホームページ</a></p>
+        <small>&copy; 2023–2025 もやしくん</small>
     </footer>
 
     <script>
         const dispKanji = document.getElementById("kanji");
         const dispUnicode = document.getElementById("unicode");
+        const x_post = document.getElementById("x_post");
+        var uniKanji = 0xff1f;
         function kanjinoji() {
             return 0x4e00 + (Math.floor((Math.random() * 20992 % 20992)));
         }
@@ -172,10 +186,12 @@
             if (document.getElementById("kana").checked) {
                 kanach = 1;
             }
-            var uniKanji = chooseKanji(kanach);
+            uniKanji = chooseKanji(kanach);
             dispKanji.innerText = String.fromCodePoint(uniKanji);
-            dispUnicode.innerHTML = '<a href="https://www.google.com/search?q=' + String.fromCodePoint(uniKanji) + '" target="_blank">' + "U+" + uniKanji.toString(16) + '</a>';
+            dispUnicode.innerHTML = '<a href="https://www.google.com/search?q=' + String.fromCodePoint(uniKanji) + '" target="_blank">' + "U+" + uniKanji.toString(16).toUpperCase() + '</a>';
+            x_post.innerHTML = '<a href="https://twitter.com/intent/tweet?text=私の書き初めは「' + String.fromCodePoint(uniKanji) + '（U%2B' + uniKanji.toString(16).toUpperCase() + '）」に決まり！%0Ahttps://moyashim-25.github.io/kanji/" target="_blank">' + "Xにポストする" + '</a>';
         }
+
     </script>
 </body>
 
